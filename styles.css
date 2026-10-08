@@ -1,0 +1,138 @@
+/* ============================================================
+   Campus Navigation Guide – custom styles
+   (Tailwind handles layout/typography; this file handles the
+   SVG map, animations and the mobile bottom sheet.)
+   ============================================================ */
+
+html { scroll-behavior: smooth; }
+
+kbd {
+  display: inline-block;
+  margin: 0 1px;
+  padding: 0 5px;
+  border: 1px solid #cbd5e1;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: #fff;
+  font-size: 11px;
+  color: #475569;
+}
+
+/* Slim scrollbars */
+.thin-scroll { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+.thin-scroll::-webkit-scrollbar { width: 6px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+
+/* ---------- SVG map: base ---------- */
+.map-svg { user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.map-grass { fill: #e9f6e3; }
+.map-trees circle { fill: #bfe3b4; }
+
+.road { fill: none; stroke: #cbd5e1; stroke-width: 3.6; }
+.road-line { fill: none; stroke: #fff; stroke-width: .35; stroke-dasharray: 1.6 1.4; }
+.road-disc { fill: #cbd5e1; }
+.fountain-island { fill: #e9f6e3; }
+.fountain { fill: #7dd3fc; stroke: #38bdf8; stroke-width: .3; }
+
+.road-label {
+  font-size: 1.7px;
+  font-weight: 600;
+  letter-spacing: .08px;
+  fill: #64748b;
+  paint-order: stroke;
+  stroke: #cbd5e1;
+  stroke-width: .7px;
+  pointer-events: none;
+}
+
+/* ---------- SVG map: clickable zones ---------- */
+.zone { cursor: pointer; outline: none; transition: opacity .2s ease; }
+.zone-bg {
+  fill: var(--c);
+  fill-opacity: .16;
+  stroke: var(--c);
+  stroke-width: .5;
+  transition: fill-opacity .2s ease, stroke-width .2s ease;
+}
+.zone:hover .zone-bg { fill-opacity: .32; }
+.zone-icon { font-size: 4.2px; text-anchor: middle; pointer-events: none; }
+.zone-label {
+  font-size: 2.1px;
+  font-weight: 700;
+  fill: #1e293b;
+  pointer-events: none;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  transition: fill .2s ease;
+}
+.zone-fav { display: none; font-size: 3px; fill: #f59e0b; stroke: #fff; stroke-width: .25; pointer-events: none; }
+.zone.is-fav .zone-fav { display: block; }
+
+.zone-dot { stroke: #fff; stroke-width: .35; pointer-events: none; }
+.zone-dot.open { fill: #10b981; }
+.zone-dot.closing { fill: #f59e0b; }
+.zone-dot.closed { fill: #f43f5e; }
+
+.zone.active .zone-bg { fill-opacity: 1; stroke-width: .8; }
+.zone.active .zone-label { fill: #fff; }
+.zone.dimmed { opacity: .25; }
+
+.zone:focus-visible .zone-bg { stroke: #0f172a; stroke-width: 1; stroke-dasharray: 1.2 .8; }
+
+/* Pulse ring around the selected building */
+.zone .pulse { display: none; fill: none; stroke: var(--c); stroke-width: .6; pointer-events: none; }
+.zone.active .pulse {
+  display: block;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ping 1.6s ease-out infinite;
+}
+
+/* Walking route from the Main Gate */
+#route { pointer-events: none; }
+.route-anim { animation: fade-in .3s ease-out; }
+.route-casing { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.route-line {
+  fill: none;
+  stroke: #4f46e5;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 2 1.6;
+  animation: dash-flow 1s linear infinite;
+}
+.route-start { fill: #4f46e5; stroke: #fff; stroke-width: .5; }
+
+/* ---------- Animations ---------- */
+@keyframes ping {
+  0%   { transform: scale(1);    opacity: .9; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+@keyframes dash-flow { to { stroke-dashoffset: -3.6; } }
+@keyframes fade-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.fade-in { animation: fade-in .25s ease-out; }
+
+/* ---------- Mobile: info panel becomes a bottom sheet ---------- */
+@media (max-width: 1023.98px) {
+  #info-panel {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 40;
+    max-height: 46vh;
+    overflow-y: auto;
+    margin: 0;
+    border-width: 1px 0 0;
+    border-radius: 1.25rem 1.25rem 0 0;
+    box-shadow: 0 -12px 32px -8px rgb(15 23 42 / .25);
+    padding-bottom: env(safe-area-inset-bottom);
+    animation: sheet-up .28s ease-out;
+  }
+  #info-panel.is-empty { display: none; }
+  /* leave room so the page can scroll above the open sheet */
+  body.has-sheet { padding-bottom: 48vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

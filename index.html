@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#4f46e5" />
+  <meta name="description" content="Interactive campus map and directions for new students." />
+  <title>Campus Navigation Guide</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🧭%3C/text%3E%3C/svg%3E" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:shadow">Skip to content</a>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
+      <div class="flex items-center gap-3">
+        <div class="grid h-10 w-10 place-items-center rounded-xl bg-indigo-600 text-xl text-white" aria-hidden="true">🧭</div>
+        <div>
+          <h1 class="text-lg font-bold leading-tight">Campus Navigation Guide</h1>
+          <p class="text-xs text-slate-500">Find your way from the Main Gate</p>
+        </div>
+      </div>
+      <div class="text-right">
+        <p id="clock" class="text-sm font-semibold tabular-nums"></p>
+        <p id="date" class="text-xs text-slate-500"></p>
+      </div>
+    </div>
+
+    <!-- Mobile tabs -->
+    <nav class="px-4 pb-3 lg:hidden" aria-label="Switch view">
+      <div role="tablist" class="grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1">
+        <button type="button" role="tab" id="tab-map" data-tab="map" aria-controls="map-view" aria-selected="true"
+          class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-500 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">🗺️ Map</button>
+        <button type="button" role="tab" id="tab-list" data-tab="list" aria-controls="list-view" aria-selected="false"
+          class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-500 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">☰ List</button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="mx-auto max-w-7xl px-4 pt-4 empty:hidden">
+    <div id="error-banner" class="hidden rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800" role="alert"></div>
+  </div>
+
+  <main id="main" class="mx-auto max-w-7xl p-4 lg:grid lg:grid-cols-[22rem_minmax(0,1fr)] lg:items-start lg:gap-6">
+
+    <!-- Sidebar: search + list -->
+    <section id="list-view" aria-label="Campus locations" role="tabpanel" aria-labelledby="tab-list"
+      class="hidden flex-col gap-3 lg:sticky lg:top-24 lg:flex lg:max-h-[calc(100vh-7rem)]">
+      <div class="relative">
+        <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="search" type="text" autocomplete="off" spellcheck="false" placeholder="Search places…  ( press / )" aria-label="Search locations"
+          class="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-9 pr-9 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+        <button id="clear-search" type="button" aria-label="Clear search"
+          class="absolute right-2 top-1/2 hidden h-6 w-6 -translate-y-1/2 place-items-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600">✕</button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1" role="group" aria-label="Filter locations">
+        <button type="button" data-filter="all" aria-pressed="true"
+          class="rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-500 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">All places</button>
+        <button type="button" data-filter="saved" aria-pressed="false"
+          class="rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-500 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500">★ Saved (<span id="saved-count">0</span>)</button>
+      </div>
+
+      <p id="result-count" class="px-1 text-xs text-slate-500" aria-live="polite"></p>
+
+      <ul id="location-list" class="thin-scroll min-h-0 flex-1 space-y-2 overflow-y-auto pr-1" aria-label="Locations">
+        <li class="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-sm text-slate-500">Loading locations…</li>
+      </ul>
+    </section>
+
+    <!-- Map + info panel -->
+    <section id="map-view" aria-label="Map and details" role="tabpanel" aria-labelledby="tab-map"
+      class="lg:grid lg:items-start lg:gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
+
+      <div class="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+        <div class="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
+          <h2 class="text-sm font-bold">Campus Map</h2>
+          <ul class="flex items-center gap-3 text-xs text-slate-500" aria-label="Map legend">
+            <li class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>Open</li>
+            <li class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-amber-500"></span>Closing soon</li>
+            <li class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-rose-500"></span>Closed</li>
+          </ul>
+        </div>
+
+        <svg id="campus-map" class="map-svg mx-auto block h-auto w-full overflow-hidden rounded-xl lg:max-h-[calc(100vh-12rem)]"
+          viewBox="0 0 100 100" role="group"
+          aria-label="Interactive campus map. Use Tab to move between buildings, arrow keys to jump to the nearest building, and Enter to select.">
+          <rect class="map-grass" width="100" height="100" />
+
+          <g class="map-trees" aria-hidden="true">
+            <circle cx="8" cy="92" r="2.6" /><circle cx="14" cy="85" r="2" /><circle cx="90" cy="91" r="2.8" />
+            <circle cx="84" cy="82" r="2" /><circle cx="93" cy="62" r="2.4" /><circle cx="7" cy="62" r="2.2" />
+            <circle cx="7" cy="30" r="2.6" /><circle cx="93" cy="38" r="2.4" /><circle cx="62" cy="80" r="2.2" />
+            <circle cx="68" cy="86" r="1.8" /><circle cx="40" cy="42" r="1.8" /><circle cx="60" cy="40" r="1.8" />
+          </g>
+
+          <g class="map-roads" aria-hidden="true">
+            <path class="road" d="M50 100V24M12 50H88M20 24H82" />
+            <path class="road-line" d="M50 100V24M12 50H88M20 24H82" />
+            <circle class="road-disc" cx="50" cy="50" r="4.6" />
+            <circle class="fountain-island" cx="50" cy="50" r="2.9" />
+            <circle class="fountain" cx="50" cy="50" r="1.6" />
+          </g>
+
+          <g id="route" aria-hidden="true"></g>
+
+          <g class="road-labels" aria-hidden="true">
+            <text class="road-label" transform="translate(50 70) rotate(-90)" text-anchor="middle" dominant-baseline="central">Central Avenue</text>
+            <text class="road-label" x="31" y="50" text-anchor="middle" dominant-baseline="central">West Lane</text>
+            <text class="road-label" x="69" y="50" text-anchor="middle" dominant-baseline="central">East Lane</text>
+            <text class="road-label" x="66" y="24" text-anchor="middle" dominant-baseline="central">North Lane</text>
+          </g>
+
+          <g id="zones"></g>
+
+          <g transform="translate(93 8)" aria-hidden="true">
+            <circle r="3.8" fill="#fff" fill-opacity=".9" />
+            <path d="M0 -3 L1 -0.6 L-1 -0.6Z" fill="#dc2626" />
+            <text y="1.9" font-size="2" font-weight="700" text-anchor="middle" fill="#334155">N</text>
+          </g>
+        </svg>
+      </div>
+
+      <aside id="info-panel" aria-live="polite" aria-label="Location details"
+        class="is-empty mt-4 rounded-2xl border border-slate-200 bg-white shadow-sm lg:sticky lg:top-24 lg:mt-4 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto xl:mt-0"></aside>
+    </section>
+  </main>
+
+  <footer class="mx-auto hidden max-w-7xl px-4 pb-8 pt-2 text-center text-xs text-slate-400 lg:block">
+    Keyboard: <kbd>/</kbd> search · <kbd>↑</kbd><kbd>↓</kbd> browse list · arrow keys on the map jump between buildings · <kbd>Enter</kbd> select · <kbd>F</kbd> save/unsave · <kbd>Esc</kbd> close details
+  </footer>
+
+  <noscript><p class="p-4 text-center text-sm">Please enable JavaScript to use the Campus Navigation Guide.</p></noscript>
+  <script src="app.js"></script>
+</body>
+</html>

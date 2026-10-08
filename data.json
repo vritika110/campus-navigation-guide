@@ -1,0 +1,160 @@
+[
+  {
+    "id": "main-gate",
+    "name": "Main Gate",
+    "short": "Main Gate",
+    "icon": "🚪",
+    "category": "Entrance",
+    "color": "#475569",
+    "description": "The main entrance to the campus. Security desk, visitor registration and the information kiosk are here. Every route in this guide starts at this point.",
+    "timings": "Open 24 hours, every day",
+    "hours": { "always": true },
+    "map": { "x": 50, "y": 93, "w": 18, "h": 9 },
+    "route": [],
+    "directions": [
+      "You are already at the Main Gate – this is the starting point for every route.",
+      "Show your student ID card to the security guard at the desk on your right.",
+      "Pick up a free campus map from the information kiosk next to the desk.",
+      "Walk straight ahead onto Central Avenue to enter the campus."
+    ]
+  },
+  {
+    "id": "admin-block",
+    "name": "Administration Block",
+    "short": "Admin Block",
+    "icon": "🏛️",
+    "category": "Administration",
+    "color": "#4f46e5",
+    "description": "Admissions, fee payment counter, ID card office and the Principal's office.",
+    "timings": "Mon–Fri, 9:00 AM – 5:00 PM",
+    "hours": { "open": "09:00", "close": "17:00", "days": [1, 2, 3, 4, 5] },
+    "map": { "x": 30, "y": 77, "w": 18, "h": 11 },
+    "route": [[50, 89], [50, 77], [39, 77]],
+    "directions": [
+      "From the Main Gate, walk straight north along Central Avenue.",
+      "Continue for about 80 metres (roughly one minute on foot).",
+      "The Administration Block, a large white building with a flag out front, is on your left.",
+      "Enter through the ground-floor lobby. The fee counter and ID card office are on the right."
+    ]
+  },
+  {
+    "id": "library",
+    "name": "Central Library",
+    "short": "Library",
+    "icon": "📚",
+    "category": "Study",
+    "color": "#d97706",
+    "description": "Over 50,000 books, journals, silent reading halls and a digital resource centre with free Wi-Fi.",
+    "timings": "Mon–Sat, 8:00 AM – 8:00 PM",
+    "hours": { "open": "08:00", "close": "20:00", "days": [1, 2, 3, 4, 5, 6] },
+    "map": { "x": 24, "y": 62, "w": 18, "h": 11 },
+    "route": [[50, 89], [50, 50], [24, 50], [24, 56]],
+    "directions": [
+      "From the Main Gate, walk straight north along Central Avenue, passing the Administration Block on your left.",
+      "After about 250 metres you will reach the fountain roundabout.",
+      "Take the first exit on the left onto West Lane.",
+      "Walk about 170 metres along the tree-lined lane.",
+      "The Central Library, a red-brick building, is on your left. The entrance is up the wide stone steps."
+    ]
+  },
+  {
+    "id": "canteen",
+    "name": "Student Canteen",
+    "short": "Canteen",
+    "icon": "🍽️",
+    "category": "Food",
+    "color": "#ea580c",
+    "description": "Affordable meals, snacks, tea and coffee. Indoor and open-air seating, plus a small juice counter.",
+    "timings": "Mon–Sat, 8:00 AM – 7:00 PM",
+    "hours": { "open": "08:00", "close": "19:00", "days": [1, 2, 3, 4, 5, 6] },
+    "map": { "x": 76, "y": 62, "w": 18, "h": 11 },
+    "route": [[50, 89], [50, 50], [76, 50], [76, 56]],
+    "directions": [
+      "From the Main Gate, walk straight north along Central Avenue.",
+      "After about 250 metres you will reach the fountain roundabout.",
+      "Take the first exit on the right onto East Lane.",
+      "Walk about 170 metres – you will smell the food before you see it!",
+      "The Canteen is the open-sided building on your right, next to the basketball court."
+    ]
+  },
+  {
+    "id": "computer-lab",
+    "name": "Computer Science Labs",
+    "short": "CS Labs",
+    "icon": "💻",
+    "category": "Academic",
+    "color": "#0284c7",
+    "description": "Four air-conditioned computer labs with high-speed internet, used for programming classes and project work.",
+    "timings": "Mon–Fri, 9:00 AM – 6:00 PM",
+    "hours": { "open": "09:00", "close": "18:00", "days": [1, 2, 3, 4, 5] },
+    "map": { "x": 24, "y": 37, "w": 18, "h": 11 },
+    "route": [[50, 89], [50, 50], [24, 50], [24, 43]],
+    "directions": [
+      "From the Main Gate, walk straight north along Central Avenue to the fountain roundabout.",
+      "Take the first exit on the left onto West Lane (the same way as the Library).",
+      "Walk about 170 metres, with the Library on your left.",
+      "The Computer Science Labs, a blue building with glass doors, are on your right – directly opposite the Library.",
+      "Take the stairs or lift to the first floor. Lab 1 is at the end of the corridor."
+    ]
+  },
+  {
+    "id": "science-lab",
+    "name": "Science & Engineering Labs",
+    "short": "Sci Labs",
+    "icon": "🔬",
+    "category": "Academic",
+    "color": "#0d9488",
+    "description": "Physics, chemistry and electronics labs. Lab coats and closed shoes are required for entry.",
+    "timings": "Mon–Fri, 9:00 AM – 5:00 PM",
+    "hours": { "open": "09:00", "close": "17:00", "days": [1, 2, 3, 4, 5] },
+    "map": { "x": 76, "y": 37, "w": 18, "h": 11 },
+    "route": [[50, 89], [50, 50], [76, 50], [76, 43]],
+    "directions": [
+      "From the Main Gate, walk straight north along Central Avenue to the fountain roundabout.",
+      "Take the first exit on the right onto East Lane (the same way as the Canteen).",
+      "Walk about 170 metres, with the Canteen on your right.",
+      "The Science & Engineering Labs, a grey building with large windows, are on your left – directly opposite the Canteen.",
+      "Sign the entry register at the reception desk before going in."
+    ]
+  },
+  {
+    "id": "hostel",
+    "name": "Student Hostel",
+    "short": "Hostel",
+    "icon": "🏠",
+    "category": "Residence",
+    "color": "#7c3aed",
+    "description": "Separate residential blocks for boys and girls, with a common room, laundry area and a 24x7 warden desk.",
+    "timings": "Entry 6:00 AM – 10:00 PM, daily",
+    "hours": { "open": "06:00", "close": "22:00", "days": [0, 1, 2, 3, 4, 5, 6] },
+    "map": { "x": 30, "y": 12, "w": 22, "h": 11 },
+    "route": [[50, 89], [50, 24], [30, 24], [30, 18]],
+    "directions": [
+      "From the Main Gate, walk straight north along Central Avenue.",
+      "Go straight through the fountain roundabout, with the two lab buildings off to either side.",
+      "Keep walking to the T-junction at the end of the avenue, about 170 metres past the roundabout.",
+      "Turn left onto North Lane and walk about 130 metres.",
+      "The Hostel gate is on your right. Check in at the warden's desk with your student ID."
+    ]
+  },
+  {
+    "id": "sports-ground",
+    "name": "Sports Ground",
+    "short": "Sports Ground",
+    "icon": "🏏",
+    "category": "Recreation",
+    "color": "#16a34a",
+    "description": "Cricket field, football pitch, 400 m running track and an indoor gym with changing rooms.",
+    "timings": "Daily, 6:00 AM – 7:00 PM",
+    "hours": { "open": "06:00", "close": "19:00", "days": [0, 1, 2, 3, 4, 5, 6] },
+    "map": { "x": 74, "y": 12, "w": 26, "h": 11 },
+    "route": [[50, 89], [50, 24], [74, 24], [74, 18]],
+    "directions": [
+      "From the Main Gate, walk straight north along Central Avenue.",
+      "Go straight through the fountain roundabout and continue to the T-junction at the end of the avenue.",
+      "Turn right onto North Lane and walk about 150 metres.",
+      "The Sports Ground opens up on your left. Enter through the main turnstile.",
+      "The gym and changing rooms are in the building just past the cricket pavilion."
+    ]
+  }
+]
